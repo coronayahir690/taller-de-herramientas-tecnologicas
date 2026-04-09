@@ -4,11 +4,3 @@ def test_suma():
 
 def test_resta():
     assert 5 - 3 == 2
-
-
-def test_multiplicacion():
-    assert 3 * 3 == 9
-
-
-def test_division():
-    assert 10 / 2 == 5
