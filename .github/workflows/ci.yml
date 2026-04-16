@@ -1,0 +1,24 @@
+name: CI Dashboard
+
+on:
+  push:
+    branches: [ develop, main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Instalar pytest
+      run: pip install pytest
+
+    - name: Ejecutar pruebas
+      run: pytest test_app.py -v
