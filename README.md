@@ -1,15 +1,15 @@
-# 📊 Dashboard de Producción
+#  Dashboard de Producción
 
-## 📌 Descripción
+##  Descripción
 Este proyecto es un dashboard desarrollado en Python con Streamlit para visualizar datos de productividad en operaciones de logística y fulfillment.
 
-## ❗ Problema identificado
+##  Problema identificado
 Los datos operativos no permiten un análisis claro en herramientas tradicionales, dificultando la toma de decisiones.
 
-## 💡 Solución
+##  Solución
 Se desarrolló un dashboard interactivo que permite visualizar métricas como picking, packing y rendimiento por empleado.
 
-## 🏗️ Arquitectura
+##  Arquitectura
 - Cliente: Navegador web  
 - Backend: Python  
 - Servidor: Streamlit  
@@ -17,7 +17,7 @@ Se desarrolló un dashboard interactivo que permite visualizar métricas como pi
 
 ---
 
-## 📑 Tabla de contenidos
+##  Tabla de contenidos
 - [Descripción](#-descripción)
 - [Instalación](#-instalación)
 - [Uso](#-uso)
@@ -26,20 +26,12 @@ Se desarrolló un dashboard interactivo que permite visualizar métricas como pi
 
 ---
 
-## ⚙️ Requerimientos
+##  Requerimientos
 - Python 3  
 - streamlit  
 - pandas  
 - mysql-connector-python  
 - plotly  
-
----
-
-## 💻 Instalación
-
-1. Clonar repositorio:
-```bash
-git clone https://github.com/coronayahir690/taller-de-herramientas-tecnologicas.git
 
 ---
 
