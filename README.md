@@ -105,7 +105,7 @@ Instalar librerías necesarias mediante pip.
 
 ---
 
-## ▶️ Uso
+##  Uso
 
 ### Usuario final
 
@@ -125,7 +125,7 @@ Instalar librerías necesarias mediante pip.
 
 
 
-## 🛣️ Roadmap
+##  Roadmap
 
 * Integración con bases de datos SQL
 * Conexión con sistemas ERP
