@@ -1,153 +1,81 @@
-import streamlit as st
-import pandas as pd
-import mysql.connector
-import plotly.express as px
+# 📊 Dashboard de Producción
 
-# =========================
-# CONFIGURACIÓN
-# =========================
-st.set_page_config(page_title="Dashboard de Producción", layout="wide")
+## 📌 Descripción
+Este proyecto es un dashboard desarrollado en Python con Streamlit para visualizar datos de productividad en operaciones de logística y fulfillment.
 
-# =========================
-# HEADER PRO (LOGO + TITULO JUNTOS)
-# =========================
-col1, col2 = st.columns([1,5])
+## ❗ Problema identificado
+Los datos operativos no permiten un análisis claro en herramientas tradicionales, dificultando la toma de decisiones.
 
-with col1:
-    st.image("logo.png", width=700)
+## 💡 Solución
+Se desarrolló un dashboard interactivo que permite visualizar métricas como picking, packing y rendimiento por empleado.
 
-with col2:
-    st.markdown(
-        "<h1 style='color:#00BFFF; margin-bottom:0;'> Dashboard de Producción</h1>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<p style='color:gray; margin-top:0;'>FulfillPro Logística & Fulfillment</p>",
-        unsafe_allow_html=True
-    )
+## 🏗️ Arquitectura
+- Cliente: Navegador web
+- Backend: Python
+- Servidor: Streamlit
+- Base de datos: MySQL (simulando ERP)
 
-st.markdown("---")
+---
 
-# =========================
-# CONEXIÓN MYSQL
-# =========================
-conexion = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="corona36715",
-    database="fulfillment"
-)
+## 📑 Tabla de contenidos
+- [Descripción](#-descripción)
+- [Instalación](#-instalación)
+- [Uso](#-uso)
+- [Contribución](#-contribución)
+- [Roadmap](#-roadmap)
 
-df = pd.read_sql("SELECT * FROM productividad", conexion)
+---
 
-# =========================
-# SIDEBAR FILTROS
-# =========================
-st.sidebar.title("⚙️ Filtros")
+## ⚙️ Requerimientos
+- Python 3
+- streamlit
+- pandas
+- mysql-connector-python
+- plotly
 
-turnos = st.sidebar.multiselect(
-    "Selecciona Turno",
-    options=df["turno"].unique(),
-    default=df["turno"].unique()
-)
+---
 
-empleados = st.sidebar.multiselect(
-    "Selecciona Empleado",
-    options=df["empleado"].unique(),
-    default=df["empleado"].unique()
-)
+## 💻 Instalación
 
-# FILTRADO
-df = df[
-    (df["turno"].isin(turnos)) &
-    (df["empleado"].isin(empleados))
-]
+1. Clonar repositorio:
+git clone https://github.com/coronayahir690/taller-de-herramientas-tecnologicas.git
 
-# =========================
-# KPIs
-# =========================
-total_picking = df["picking"].sum()
-total_packing = df["packing"].sum()
-total_operaciones = total_picking + total_packing
-promedio = total_operaciones / len(df) if len(df) > 0 else 0
+2. Entrar a la carpeta:
+cd taller-de-herramientas-tecnologicas
 
-col1, col2, col3, col4 = st.columns(4)
+3. Instalar dependencias:
+pip install -r requirements.txt
 
-col1.metric("📦 Picking Total", total_picking)
-col2.metric("📦 Packing Total", total_packing)
-col3.metric("⚡ Total Operaciones", total_operaciones)
-col4.metric("📊 Promedio por empleado", round(promedio, 2))
+---
 
-st.markdown("---")
+## ▶️ Uso
 
-# =========================
-# GRÁFICAS
-# =========================
-col1, col2 = st.columns(2)
+Ejecutar el sistema:
+streamlit run panel.py
 
-with col1:
-    st.subheader("📊 Productividad por Empleado")
-    fig1 = px.bar(
-        df,
-        x="empleado",
-        y=["picking", "packing"],
-        barmode="group"
-    )
-    st.plotly_chart(fig1, use_container_width=True)
+Abrir en navegador:
+http://localhost:8501
 
-with col2:
-    st.subheader("📊 Distribución por Turno")
-    df_turno = df.groupby("turno").sum(numeric_only=True).reset_index()
+---
 
-    if not df_turno.empty:
-        fig2 = px.pie(
-            df_turno,
-            names="turno",
-            values="picking",
-            hole=0.4
-        )
-        st.plotly_chart(fig2, use_container_width=True)
-    else:
-        st.warning("No hay datos para mostrar")
+## 🤝 Contribución
 
-# =========================
-# RANKING
-# =========================
-st.subheader("🏆 Ranking de Empleados")
+1. Clonar repositorio  
+2. Crear rama:  
+git checkout -b nueva-rama  
+3. Subir cambios  
+git push origin nueva-rama  
+4. Crear Pull Request  
 
-df["total"] = df["picking"] + df["packing"]
-df_rank = df.sort_values(by="total", ascending=False)
+---
 
-fig3 = px.bar(
-    df_rank,
-    x="empleado",
-    y="total",
-    color="total"
-)
+## 🛣️ Roadmap
+- Integración con ERP
+- Mejora de interfaz
+- Implementación en la nube
+- Sistema de usuarios
 
-st.plotly_chart(fig3, use_container_width=True)
+---
 
-# =========================
-# ALERTAS
-# =========================
-st.subheader("🚨 Alertas de Bajo Rendimiento")
-
-if not df.empty:
-    promedio_total = df["total"].mean()
-    bajo = df[df["total"] < promedio_total]
-
-    if not bajo.empty:
-        st.warning("Hay empleados con rendimiento bajo")
-        st.dataframe(bajo)
-    else:
-        st.success("Todos los empleados están dentro del rendimiento esperado")
-
-# =========================
-# TABLA FINAL
-# =========================
-st.subheader("📋 Datos Detallados")
-st.dataframe(df)
-•	Conexión con sistemas ERP
-•	Mejora de interfaz gráfica
-•	Implementación en la nube
-•	Sistema de usuarios y autenticación
+## 📦 Producto
+Dashboard funcional desarrollado en Python con conexión a base de datos MySQL.
