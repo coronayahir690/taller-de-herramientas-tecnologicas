@@ -1,149 +1,77 @@
-import streamlit as st
-import pandas as pd
-import mysql.connector
-import plotly.express as px
+Dashboard de Análisis de Datos
+Descripción
+Este proyecto consiste en un dashboard desarrollado en Python utilizando Streamlit para la visualización interactiva de datos.
+Problema identificado
+Las herramientas tradicionales como Excel no permiten una visualización dinámica ni análisis en tiempo real, lo que dificulta la toma de decisiones.
+Solución
+Se desarrolló un dashboard interactivo que permite visualizar datos mediante gráficos, facilitando el análisis y la interpretación de la información.
+Arquitectura
+•	Cliente: Navegador web
+•	Servidor de aplicación: Streamlit (Python)
+•	Backend: Python
+•	Base de datos: (opcional, puede integrarse con SQL o ERP)
 
-# =========================
-# CONFIGURACIÓN
-# =========================
-st.set_page_config(page_title="Dashboard de Producción", layout="wide")
+Tabla de contenidos
+•	Descripción
+•	Problema identificado
+•	Solución
+•	Arquitectura
+•	Requerimientos
+•	Instalación
+•	Configuración
+•	Uso
+•	Contribución
+•	Roadmap
 
-# =========================
-# HEADER PRO (LOGO + TITULO JUNTOS)
-# =========================
-col1, col2 = st.columns([1,5])
+Requerimientos
+Servidores
+•	Servidor local (Streamlit)
+•	Navegador web
+Software
+•	Python 3.8 o superior
+•	No se requiere Java
+Paquetes adicionales
+•	streamlit
+•	pandas
+•	matplotlib (opcional)
 
-with col1:
-    st.image("logo.png", width=700)
+Instalación
+1. Clonar repositorio
+git clone https://github.com/coronayahir690/taller-de-herramientas-tecnologicas.git
+2. Entrar al proyecto
+cd taller-de-herramientas-tecnologicas
+3. Instalar dependencias
+pip install -r requirements.txt
 
-with col2:
-    st.markdown(
-        "<h1 style='color:#00BFFF; margin-bottom:0;'> Dashboard de Producción</h1>",
-        unsafe_allow_html=True
-    )
-    st.markdown(
-        "<p style='color:gray; margin-top:0;'>FulfillPro Logística & Fulfillment</p>",
-        unsafe_allow_html=True
-    )
+Pruebas manuales
+Ejecutar el sistema: streamlit run panel.py
+Verificar:
+•	Que cargue el dashboard
+•	Que se muestren los gráficos
 
-st.markdown("---")
+Implementación
+Local
+Se ejecuta mediante Streamlit en localhost: 
 
-# =========================
-# CONEXIÓN MYSQL
-# =========================
-conexion = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="corona36715",
-    database="fulfillment"
-)
+Configuración
+Producto
+No requiere configuración adicional.
+Requerimientos
+Instalar librerías necesarias mediante pip.
 
-df = pd.read_sql("SELECT * FROM productividad", conexion)
+Uso
+Usuario final
+1.	Ejecutar: streamlit run panel.py
+2.	Abrir navegador
+3.	Visualizar datos y gráficos
 
-# =========================
-# SIDEBAR FILTROS
-# =========================
-st.sidebar.title("⚙️ Filtros")
-
-turnos = st.sidebar.multiselect(
-    "Selecciona Turno",
-    options=df["turno"].unique(),
-    default=df["turno"].unique()
-)
-
-empleados = st.sidebar.multiselect(
-    "Selecciona Empleado",
-    options=df["empleado"].unique(),
-    default=df["empleado"].unique()
-)
-
-# FILTRADO
-df = df[
-    (df["turno"].isin(turnos)) &
-    (df["empleado"].isin(empleados))
-]
-
-# =========================
-# KPIs
-# =========================
-total_picking = df["picking"].sum()
-total_packing = df["packing"].sum()
-total_operaciones = total_picking + total_packing
-promedio = total_operaciones / len(df) if len(df) > 0 else 0
-
-col1, col2, col3, col4 = st.columns(4)
-
-col1.metric("📦 Picking Total", total_picking)
-col2.metric("📦 Packing Total", total_packing)
-col3.metric("⚡ Total Operaciones", total_operaciones)
-col4.metric("📊 Promedio por empleado", round(promedio, 2))
-
-st.markdown("---")
-
-# =========================
-# GRÁFICAS
-# =========================
-col1, col2 = st.columns(2)
-
-with col1:
-    st.subheader("📊 Productividad por Empleado")
-    fig1 = px.bar(
-        df,
-        x="empleado",
-        y=["picking", "packing"],
-        barmode="group"
-    )
-    st.plotly_chart(fig1, use_container_width=True)
-
-with col2:
-    st.subheader("📊 Distribución por Turno")
-    df_turno = df.groupby("turno").sum(numeric_only=True).reset_index()
-
-    if not df_turno.empty:
-        fig2 = px.pie(
-            df_turno,
-            names="turno",
-            values="picking",
-            hole=0.4
-        )
-        st.plotly_chart(fig2, use_container_width=True)
-    else:
-        st.warning("No hay datos para mostrar")
-
-# =========================
-# RANKING
-# =========================
-st.subheader("🏆 Ranking de Empleados")
-
-df["total"] = df["picking"] + df["packing"]
-df_rank = df.sort_values(by="total", ascending=False)
-
-fig3 = px.bar(
-    df_rank,
-    x="empleado",
-    y="total",
-    color="total"
-)
-
-st.plotly_chart(fig3, use_container_width=True)
-
-# =========================
-# ALERTAS
-# =========================
-st.subheader("🚨 Alertas de Bajo Rendimiento")
-
-if not df.empty:
-    promedio_total = df["total"].mean()
-    bajo = df[df["total"] < promedio_total]
-
-    if not bajo.empty:
-        st.warning("Hay empleados con rendimiento bajo")
-        st.dataframe(bajo)
-    else:
-        st.success("Todos los empleados están dentro del rendimiento esperado")
-
-# =========================
-# TABLA FINAL
-# =========================
-st.subheader("📋 Datos Detallados")
-st.dataframe(df)
+Administrador
+•	Modificar el código fuente
+•	Agregar nuevas visualizaciones
+•	Integrar nuevas fuentes de datos (ERP, SQL)
+Roadmap
+•	Integración con bases de datos SQL
+•	Conexión con sistemas ERP
+•	Mejora de interfaz gráfica
+•	Implementación en la nube
+•	Sistema de usuarios y autenticación
